@@ -1,0 +1,319 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f5f0 0%, #e8e8e0 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d5a2d;
+        }
+
+        .logo::before {
+            content: "🤖🍓";
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: #2d5a2d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+    
+        }
+
+        .nav-link:hover {
+            color: #5a8a5a;
+        }
+
+        .analysis-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .analysis-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        /* Instructions Section */
+        .instructions-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .instructions-header {
+            background: linear-gradient(135deg, #5cb85c, #4a9c4a);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 25px rgba(92, 184, 92, 0.3);
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .instructions-list {
+            background: linear-gradient(135deg, #a8d5a8, #8bc68b);
+            padding: 2rem;
+            border-radius: 20px;
+            color: #2d5a2d;
+            font-weight: 600;
+            line-height: 1.8;
+            box-shadow: 0 8px 25px rgba(168, 213, 168, 0.3);
+            animation: slideInLeft 0.6s ease-out 0.2s both;
+        }
+
+        .instruction-step {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .instruction-step:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            animation: slideInRight 0.6s ease-out 0.4s both;
+        }
+
+        .upload-area {
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(135deg, #d1d1d1, #b8b8b8);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px dashed rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-area:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: #5cb85c;
+        }
+
+        .upload-area.dragover {
+            border-color: #5cb85c;
+            background: linear-gradient(135deg, #e8f5e8, #d4f0d4);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover .upload-icon {
+            color: #5cb85c;
+            transform: scale(1.1);
+        }
+
+        .upload-text {
+            color: rgba(0, 0, 0, 0.6);
+            font-weight: 600;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .upload-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer Note */
+        .footer-note {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        /* Preview Area */
+        .preview-container {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .upload-area {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+                gap: 2rem;
+            }
+
+            .upload-area {
+                height: 250px;
+            }
+
+            .upload-icon {
+                font-size: 3rem;
+            }
+
+            .instructions-header,
+            .instructions-list {
+                padding: 1.5rem;
+            }
+
+            .footer-note {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading animation */
+        .upload-area.loading {
+            pointer-events: none;
+        }
+
+        .upload-area.loading .upload-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BerryBot - Subir Fresas para Análisis</title>
+    
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Strawbot</div>
+        <nav>
+            <a href="parametros" class="nav-link">Nuestras métricas</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Instructions Section -->
+        <section class="instructions-section">
+            <div class="instructions-header">
+                INSTRUCCIONES BÁSICAS
+            </div>
+            <div class="instructions-list">
+                <div class="instruction-step">
+                    1. Haz click en el botón "Subir fresas por analizar"
+                </div>
+                <div class="instruction-step">
+                    2. Seleccione la foto de la fresa que dispondrá para el análisis
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">
+                    Arrastra tus imágenes aquí<br>
+                    o haz click para seleccionar
+                </div>
+                <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+            </div>
+            
+            <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                Subir fresas por analizar
+            </button>
+
+            <div class="preview-container" id="previewContainer">
+                <div id="imagePreview"></div>
+            </div>
+        </section>
+
+        <!-- Footer Note -->
+        <div class="footer-note">
+            <strong>Nota:</strong> El prototipo solo reconoce el tratado de imágenes donde se puedan identificar fresas.<br>
+            Por favor abstenerse de subir otro tipo de contenido
+        </div>
+    </main>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            // Show loading state
+            uploadArea.classList.add('loading');
+            uploadArea.querySelector('.upload-icon').textContent = '⏳';
+            uploadArea.querySelector('.upload-text').textContent = 'Procesando imágenes...';
+
+            // Clear previous previews
+            imagePreview.innerHTML = '';
+
+            // Process files
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'preview-image';
+                        img.style.margin = '0.5rem';
+                        imagePreview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Simulate processing time
+            setTimeout(() => {
+                uploadArea.classList.remove('loading');
+                uploadArea.querySelector('.upload-icon').textContent = '✅';
+                uploadArea.querySelector('.upload-text').textContent = `${files.length} imagen(es) cargada(s) correctamente`;
+                previewContainer.style.display = 'block';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
