@@ -1,129 +1,67 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BerryBot - Subir Fresas para Análisis</title>
-    
-</head>
-<body>
-    <header class="header">
-        <div class="logo">Strawbot</div>
-        <nav>
-            <a href="parametros" class="nav-link">Nuestras métricas</a>
-        </nav>
-    </header>
+<header class="header">
+    <div class="logo">Strawbot</div>
+    <nav>
+        <a routerLink="/parametros" class="nav-link">Nuestras métricas</a>
+    </nav>
+</header>
 
-    <main class="main-content">
-        <!-- Instructions Section -->
-        <section class="instructions-section">
-            <div class="instructions-header">
-                INSTRUCCIONES BÁSICAS
-            </div>
-            <div class="instructions-list">
-                <div class="instruction-step">
-                    1. Haz click en el botón "Subir fresas por analizar"
-                </div>
-                <div class="instruction-step">
-                    2. Seleccione la foto de la fresa que dispondrá para el análisis
-                </div>
-            </div>
-        </section>
-
-        <!-- Upload Section -->
-        <section class="upload-section">
-            <div class="upload-area" id="uploadArea">
-                <div class="upload-icon">🖼️</div>
-                <div class="upload-text">
-                    Arrastra tus imágenes aquí<br>
-                    o haz click para seleccionar
-                </div>
-                <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
-            </div>
-            
-            <button class="upload-button" onclick="document.getElementById('fileInput').click()">
-                Subir fresas por analizar
-            </button>
-
-            <div class="preview-container" id="previewContainer">
-                <div id="imagePreview"></div>
-            </div>
-        </section>
-
-        <!-- Footer Note -->
-        <div class="footer-note">
-            <strong>Nota:</strong> El prototipo solo reconoce el tratado de imágenes donde se puedan identificar fresas.<br>
-            Por favor abstenerse de subir otro tipo de contenido
+<main class="main-content">
+    <!-- Instructions Section -->
+    <section class="instructions-section">
+        <div class="instructions-header">
+            INSTRUCCIONES BÁSICAS
         </div>
-    </main>
+        <div class="instructions-list">
+            <div class="instruction-step">
+                1. Haz click en el botón "Subir fresas por analizar"
+            </div>
+            <div class="instruction-step">
+                2. Seleccione la foto de la fresa que dispondrá para el análisis
+            </div>
+        </div>
+    </section>
 
-    <script>
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const previewContainer = document.getElementById('previewContainer');
-        const imagePreview = document.getElementById('imagePreview');
+    <!-- Upload Section -->
+    <section class="upload-section">
+        <div class="upload-area" 
+             [class.dragover]="isDragOver" 
+             [class.loading]="isLoading"
+             (click)="triggerFileInput()"
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave()"
+             (drop)="onDrop($event)">
+            <div class="upload-icon">{{uploadIcon}}</div>
+            <div class="upload-text" [innerText]="uploadText"></div>
+            <input type="file" #fileInput class="file-input" accept="image/*" multiple (change)="onFileSelected($event)">
+        </div>
+        
+        <button class="upload-button" (click)="triggerFileInput()">
+            Subir fresas por analizar
+        </button>
 
-        // Click to upload
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
+        <div class="preview-container" [style.display]="showPreview ? 'block' : 'none'">
+            <div id="imagePreview" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <div *ngFor="let item of previewImages" class="preview-item" style="display: flex; flex-direction: column; align-items: center; background: white; padding: 1rem; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 220px;">
+                    <img [src]="item.url" class="preview-image" style="margin: 0; width: 100%; height: 180px; object-fit: cover; border-radius: 10px;">
+                    <div class="predictions" style="margin-top: 0.8rem; width: 100%; text-align: left;">
+                        <div *ngIf="item.predictions.length > 0; else noPreds">
+                            <div *ngFor="let pred of item.predictions" style="font-size: 0.85rem; color: #2d5a2d; font-weight: 600; background: #e8f5e8; padding: 4px 8px; border-radius: 5px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                                <span>🍓 {{pred.class}}</span>
+                                <span style="color: #5cb85c;">{{(pred.confidence * 100).toFixed(0)}}%</span>
+                            </div>
+                        </div>
+                        <ng-template #noPreds>
+                            <div style="font-size: 0.85rem; color: #999; font-style: italic; text-align: center; padding: 5px;">Esperando resultados...</div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // Drag and drop functionality
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
-
-        // File input change
-        fileInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
-
-        function handleFiles(files) {
-            if (files.length === 0) return;
-
-            // Show loading state
-            uploadArea.classList.add('loading');
-            uploadArea.querySelector('.upload-icon').textContent = '⏳';
-            uploadArea.querySelector('.upload-text').textContent = 'Procesando imágenes...';
-
-            // Clear previous previews
-            imagePreview.innerHTML = '';
-
-            // Process files
-            Array.from(files).forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'preview-image';
-                        img.style.margin = '0.5rem';
-                        imagePreview.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Simulate processing time
-            setTimeout(() => {
-                uploadArea.classList.remove('loading');
-                uploadArea.querySelector('.upload-icon').textContent = '✅';
-                uploadArea.querySelector('.upload-text').textContent = `${files.length} imagen(es) cargada(s) correctamente`;
-                previewContainer.style.display = 'block';
-            }, 2000);
-        }
-    </script>
-</body>
-</html>
+    <!-- Footer Note -->
+    <div class="footer-note">
+        <strong>Nota:</strong> El prototipo utiliza YOLO11 para identificar la calidad de las fresas en tiempo real.<br>
+        Por favor asegúrate de que las imágenes tengan buena iluminación.
+    </div>
+</main>
