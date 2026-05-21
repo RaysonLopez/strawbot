@@ -40,24 +40,112 @@
         </button>
 
         <div class="preview-container" [style.display]="showPreview ? 'block' : 'none'">
-            <div id="imagePreview" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-                <div *ngFor="let item of previewImages" class="preview-item" style="display: flex; flex-direction: column; align-items: center; background: white; padding: 1rem; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 220px;">
-                    <img [src]="item.url" class="preview-image" style="margin: 0; width: 100%; height: 180px; object-fit: cover; border-radius: 10px;">
-                    <div class="predictions" style="margin-top: 0.8rem; width: 100%; text-align: left;">
+            <div id="imagePreview" style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin-top: 1.5rem;">
+                <div *ngFor="let item of previewImages" class="preview-item" style="display: flex; flex-direction: column; align-items: center; background: white; padding: 1.2rem; border-radius: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); width: 240px; border: 1px solid rgba(0,0,0,0.04); transition: transform 0.3s ease;">
+                    <img [src]="item.url" class="preview-image" style="margin: 0; width: 100%; height: 180px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                    <div class="predictions" style="margin-top: 1rem; width: 100%; text-align: center;">
                         <div *ngIf="item.predictions.length > 0; else noPreds">
-                            <div *ngFor="let pred of item.predictions" style="font-size: 0.85rem; color: #2d5a2d; font-weight: 600; background: #e8f5e8; padding: 4px 8px; border-radius: 5px; margin-bottom: 4px; display: flex; justify-content: space-between;">
-                                <span>🍓 {{pred.class}}</span>
-                                <span style="color: #5cb85c;">{{(pred.confidence * 100).toFixed(0)}}%</span>
-                            </div>
+                            <!-- Detailed Report Button -->
+                            <button class="ver-reporte-btn" (click)="openReportModal(item)">
+                                📊 Ver Reporte
+                            </button>
                         </div>
                         <ng-template #noPreds>
-                            <div style="font-size: 0.85rem; color: #999; font-style: italic; text-align: center; padding: 5px;">Esperando resultados...</div>
+                            <div style="font-size: 0.85rem; color: #888; font-style: italic; text-align: center; padding: 12px; background: #f8f9fa; border-radius: 8px;">
+                                ⏳ Analizando...
+                            </div>
                         </ng-template>
                     </div>
+
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal Reporte -->
+    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <button class="modal-close-btn" (click)="closeModal()">&times;</button>
+            
+            <div class="modal-header">
+                <h2 class="modal-title">📊 Reporte Detallado de Calidad</h2>
+                <p class="modal-subtitle">Resultados del análisis YOLO11 en tiempo real</p>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Columna Izquierda: Imagen con Bounding Boxes -->
+                <div class="modal-img-col">
+                    <div class="modal-img-wrapper">
+                        <img [src]="selectedItem?.url" class="modal-display-img" alt="Análisis de fresas">
+                        
+                        <!-- Contenedor absoluto para bounding boxes -->
+                        <div *ngFor="let pred of selectedItem?.predictions; let i = index" 
+                             class="modal-bbox"
+                             [class.selected-active]="selectedBoxIndex === i"
+                             [class.selected-inactive]="selectedBoxIndex !== null && selectedBoxIndex !== i"
+                             [style.left.%]="getBoxStyle(pred.box).left"
+                             [style.top.%]="getBoxStyle(pred.box).top"
+                             [style.width.%]="getBoxStyle(pred.box).width"
+                             [style.height.%]="getBoxStyle(pred.box).height"
+                             [style.border-color]="getCalidadInfo(pred.class).borderColor"
+                             (click)="selectBox(i)">
+                            
+                            <span class="bbox-label" [style.background-color]="getCalidadInfo(pred.class).borderColor">
+                                #{{ i + 1 }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Columna Derecha: Reporte detallado -->
+                <div class="modal-info-col">
+                    <div class="detected-count" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>
+                            <span *ngIf="selectedBoxIndex === null">Fresas detectadas: <strong>{{ selectedItem?.predictions?.length }}</strong></span>
+                            <span *ngIf="selectedBoxIndex !== null">🍓 Mostrando Fresa <strong>#{{ selectedBoxIndex + 1 }}</strong></span>
+                        </span>
+                        <button *ngIf="selectedBoxIndex !== null" 
+                                (click)="selectBox(selectedBoxIndex!)" 
+                                style="background: white; color: #0369a1; border: 1px solid #bae6fd; border-radius: 6px; padding: 4px 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                            Ver todas
+                        </button>
+                    </div>
+                    
+                    <div class="report-cards-list">
+                        <ng-container *ngFor="let pred of selectedItem?.predictions; let i = index">
+                            <div *ngIf="selectedBoxIndex === null || selectedBoxIndex === i"
+                                 class="report-item-card"
+                                 [style.border-left-color]="getCalidadInfo(pred.class).borderColor"
+                                 [style.background-color]="getCalidadInfo(pred.class).bg"
+                                 (click)="selectBox(i)"
+                                 style="cursor: pointer;">
+                                
+                                <div class="card-header-row">
+                                    <span class="card-number-badge" [style.background-color]="getCalidadInfo(pred.class).borderColor">
+                                        Fresa #{{ i + 1 }}
+                                    </span>
+                                    <span class="card-confidence">
+                                        Confianza: <strong>{{ (pred.confidence * 100).toFixed(0) }}%</strong>
+                                    </span>
+                                </div>
+                                
+                                <div class="card-body-content">
+                                    <h4 class="card-status-title" [style.color]="getCalidadInfo(pred.class).color">
+                                        {{ getCalidadInfo(pred.class).icon }} {{ getCalidadInfo(pred.class).title }}
+                                    </h4>
+                                    <p class="card-desc-text">
+                                        {{ getCalidadInfo(pred.class).desc }}
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
     <!-- Footer Note -->
     <div class="footer-note">
