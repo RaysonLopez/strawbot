@@ -1,77 +1,65 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BerryBot - Métricas de Análisis</title>
-    
-</head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <a href="./">
-                <label class="nav-link"> Strawbot </label>
-            </a>
-            
-        </div>
-        <nav>
-            <a href="#" class="nav-link"> </a>
-        </nav>
-        <a href="/image">
-            <button class="analysis-btn">Análisis</button>
+<header class="header">
+    <div class="logo">
+        <a routerLink="/">
+            <label class="nav-link"> Strawbot </label>
         </a>
-    </header>
+    </div>
+    <nav>
+        <a href="#" class="nav-link"> </a>
+    </nav>
+    <a routerLink="/image">
+        <button class="analysis-btn">Análisis</button>
+    </a>
+</header>
 
-    <main class="main-content">
-        <!-- Parameters Section -->
-        <section class="parameters-section">
-            <div class="parameter-group">
-                <h2>Forma</h2>
-                <div class="parameter-card">
-                    Descripción breve del parámetro
-                </div>
+<main class="main-content">
+    <!-- Parameters Section -->
+    <section class="parameters-section">
+        <div class="parameter-group">
+            <h2>Forma</h2>
+            <div class="parameter-card">
+                Descripción breve del parámetro
             </div>
-            <div class="parameter-group">
-                <h2>Color</h2>
-                <div class="parameter-card">
-                    Descripción breve del parámetro
-                </div>
-            </div>
-        </section>
-
-        <!-- Image Analysis Section -->
-        <section class="image-section">
-            <div class="image-placeholder"></div>
-        </section>
-    </main>
-
-    <!-- Results Section -->
-    <section class="results-section">
-        <div class="results-container">
-            <div class="result-card excellent">
-                <span class="result-icon">✨</span>
-                <h3 class="result-title">Excelente Condición</h3>
-                <p class="result-description">
-                    El análisis de las imágenes muestra que tus fresas están en excelentes condiciones y están listas para su distribución en el mercado.
-                </p>
-            </div>
-
-            <div class="result-card decent">
-                <span class="result-icon">⚠️</span>
-                <h3 class="result-title">Condición Decente</h3>
-                <p class="result-description">
-                    Las imágenes revelan que tus fresas tienen algunas imperfecciones, pero aún son ideales para la producción de mermelada o jugos frescos.
-                </p>
-            </div>
-
-            <div class="result-card poor">
-                <span class="result-icon">🗑️</span>
-                <h3 class="result-title">Mala Condición</h3>
-                <p class="result-description">
-                    Según el análisis visual de las imágenes, presenta problemas de calidad debido a otros factores, por lo que no son aptas para la venta.
-                </p>
+        </div>
+        <div class="parameter-group">
+            <h2>Color</h2>
+            <div class="parameter-card">
+                Descripción breve del parámetro
             </div>
         </div>
     </section>
-</body>
-</html>
+
+    <!-- Image Analysis Section -->
+    <section class="image-section">
+        <div class="image-placeholder"></div>
+    </section>
+</main>
+
+<!-- Results Section -->
+<section class="results-section">
+    <div class="results-container">
+        <div class="result-card excellent">
+            <span class="result-icon">✨</span>
+            <h3 class="result-title">Excelente Condición</h3>
+            <p class="result-description">
+                El análisis de las imágenes muestra que tus fresas están en excelentes condiciones y están listas para su distribución en el mercado.
+            </p>
+        </div>
+
+        <div class="result-card decent">
+            <span class="result-icon">⚠️</span>
+            <h3 class="result-title">Condición Decente</h3>
+            <p class="result-description">
+                Las imágenes revelan que tus fresas tienen algunas imperfecciones, pero aún son ideales para la producción de mermelada o jugos frescos.
+            </p>
+        </div>
+
+        <div class="result-card poor">
+            <span class="result-icon">🗑️</span>
+            <h3 class="result-title">Mala Condición</h3>
+            <p class="result-description">
+                Según el análisis visual de las imágenes, presenta problemas de calidad debido a otros factores, por lo que no son aptas para la venta.
+            </p>
+        </div>
+    </div>
+</section>
