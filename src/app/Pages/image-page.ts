@@ -217,5 +217,48 @@ export class ImagePageComponent {
       desc: 'Fresa no apta para consumo o comercialización directa debido a daños graves o mala calidad.'
     };
   }
+
+  getSummary() {
+    if (!this.selectedItem?.predictions) {
+      return { buenas: 0, malas: 0, moho: 0, total: 0 };
+    }
+
+    let buenas = 0;
+    let malas = 0;
+    let moho = 0;
+
+    for (const pred of this.selectedItem.predictions) {
+      const title = this.getCalidadInfo(pred.class).title;
+
+      if (title === 'Fresa Sana') {
+        buenas++;
+      } else if (title === 'Fresa con Hongo') {
+        moho++;
+      } else {
+        // Inmadura, Malformada, con Plaga, Mala Condición
+        malas++;
+      }
+    }
+
+    return { buenas, malas, moho, total: this.selectedItem.predictions.length };
+  }
+
+  getCategorySummary() {
+    if (!this.selectedItem?.predictions) {
+      return [];
+    }
+
+    const counts: Record<string, number> = {};
+
+    for (const pred of this.selectedItem.predictions) {
+      const title = this.getCalidadInfo(pred.class).title;
+      counts[title] = (counts[title] || 0) + 1;
+    }
+
+    return Object.entries(counts).map(([category, count]) => ({
+      category,
+      count
+    }));
+  }
 }
 

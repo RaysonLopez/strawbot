@@ -658,6 +658,38 @@
             }
         }
 
+        /* Resumen de categorías - tarjetas de conteo */
+        .card-sana {
+            background: #e8f5e8;
+            border: 1px solid #2ecc71;
+            color: #2d5a2d;
+        }
+        .card-deformada {
+            background: #fdf2e9;
+            border: 1px solid #e67e22;
+            color: #d35400;
+        }
+        .card-moho {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            color: #7f1d1d;
+        }
+        .card-plaga {
+            background: #fef3c7;
+            border: 1px solid #d97706;
+            color: #78350f;
+        }
+        .card-inmadura {
+            background: #fff9e6;
+            border: 1px solid #f1c40f;
+            color: #8a6d3b;
+        }
+        .card-mala {
+            background: #f2dede;
+            border: 1px solid #e74c3c;
+            color: #a94442;
+        }
+
         /* Responsive Modal */
         @media (max-width: 900px) {
             .modal-content {

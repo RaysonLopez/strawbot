@@ -15,16 +15,11 @@
 <main class="main-content">
     <!-- Parameters Section -->
     <section class="parameters-section">
-        <div class="parameter-group">
-            <h2>Forma</h2>
-            <div class="parameter-card">
-                Descripción breve del parámetro
-            </div>
-        </div>
-        <div class="parameter-group">
-            <h2>Color</h2>
-            <div class="parameter-card">
-                Descripción breve del parámetro
+        <div class="parameter-group" *ngFor="let p of parametros">
+            <h2>{{ p.titulo }}</h2>
+            <div class="parameter-card" (click)="openDescripcion(p)" style="cursor: pointer;">
+                <span>📄 Breve descripción del parámetro</span>
+                <span class="click-hint">Haz clic para ver descripción completa</span>
             </div>
         </div>
     </section>
@@ -63,3 +58,20 @@
         </div>
     </div>
 </section>
+
+<!-- Modal Descripción Parámetro -->
+<div class="modal-overlay-param" *ngIf="selectedParametro" (click)="closeDescripcion()">
+    <div class="modal-content-param" (click)="$event.stopPropagation()">
+        <button class="modal-close-param" (click)="closeDescripcion()">&times;</button>
+        <div class="modal-header-param">
+            <h2 class="modal-title-param">{{ selectedParametro.titulo }}</h2>
+            <p class="modal-subtitle-param">Parámetro de calidad del Strawbot</p>
+        </div>
+        <div class="modal-body-param">
+            <p class="param-descripcion">{{ selectedParametro.descripcion }}</p>
+        </div>
+        <div class="modal-footer-param">
+            <button class="btn-cerrar-param" (click)="closeDescripcion()">Cerrar</button>
+        </div>
+    </div>
+</div>

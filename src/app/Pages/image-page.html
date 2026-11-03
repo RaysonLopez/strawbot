@@ -111,6 +111,28 @@
                         </button>
                     </div>
                     
+                    <!-- Resumen de conteos por categoría: sanas, deformadas, con moho y todas las etiquetas -->
+                    <div class="summary-cards" style="display: flex; gap: 0.75rem; margin: 1.5rem 0; flex-wrap: wrap;">
+                        <div *ngFor="let item of getCategorySummary()"
+                             class="summary-card"
+                             style="flex: 1; min-width: 140px; border-radius: 12px; padding: 1rem; text-align: center;"
+                             [ngClass]="{
+                               'card-sana': item.category === 'Fresa Sana',
+                               'card-deformada': item.category === 'Fresa Malformada',
+                               'card-moho': item.category === 'Fresa con Hongo',
+                               'card-plaga': item.category === 'Fresa con Plaga',
+                               'card-inmadura': item.category === 'Fresa Inmadura',
+                               'card-mala': item.category === 'Mala Condición'
+                             }">
+                            <div style="font-size: 1.75rem; font-weight: 800;" [ngStyle]="{'color': item.category === 'Fresa Sana' ? '#2d5a2d' : item.category === 'Fresa Malformada' ? '#d35400' : item.category === 'Fresa con Hongo' ? '#7f1d1d' : item.category === 'Fresa con Plaga' ? '#78350f' : item.category === 'Fresa Inmadura' ? '#8a6d3b' : '#a94442'}">
+                                {{ item.count }}
+                            </div>
+                            <div style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase;" [ngStyle]="{'color': item.category === 'Fresa Sana' ? '#2d5a2d' : item.category === 'Fresa Malformada' ? '#d35400' : item.category === 'Fresa con Hongo' ? '#7f1d1d' : item.category === 'Fresa con Plaga' ? '#78350f' : item.category === 'Fresa Inmadura' ? '#8a6d3b' : '#a94442'}">
+                                {{ item.category }}
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="report-cards-list">
                         <ng-container *ngFor="let pred of selectedItem?.predictions; let i = index">
                             <div *ngIf="selectedBoxIndex === null || selectedBoxIndex === i"
